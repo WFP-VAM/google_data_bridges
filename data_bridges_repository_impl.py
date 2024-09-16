@@ -49,7 +49,7 @@ class DataBridgesRepository:
     def get_total_pages(self, endpoint_type: EndpointType, params):
         pass
 
-    def fetch_data_bridges_data(self, endpoint_type: EndpointType, **params) -> pd.DataFrame:
+    def fetch_all_data_bridges_data(self, endpoint_type: EndpointType, **params) -> pd.DataFrame:
         pass
 
     def fetch_one_data_bridges_page(self, endpoint_type: EndpointType, params) -> pd.DataFrame:
@@ -154,7 +154,7 @@ class DataBridgesRepositoryImpl(DataBridgesRepository):
         self.api_instance_commodities = data_bridges_client.CommoditiesApi(api_client)
         self.api_instance_economic = data_bridges_client.EconomicDataApi(api_client)
 
-    def fetch_data_bridges_data(self, endpoint_type: EndpointType, **params) -> pd.DataFrame:
+    def fetch_all_data_bridges_data(self, endpoint_type: EndpointType, **params) -> pd.DataFrame:
         all_data_df = pd.DataFrame()
         _total_pages = self.get_total_pages(endpoint_type, params)
 
@@ -223,10 +223,10 @@ if __name__ == "__main__":
         'page': 3
     }
 
-    # fetches 1 page of data (1000 records)
+    # fetches 1 page of raw data (1000 records)
     response_raw_data_page_3 = d_bridges.fetch_data_one_page(EndpointType.CURRENCY_USD_QUOTE, **currency_params)
     logger.info(f"API raw response for page 3: {response_raw_data_page_3}")
 
     # loops automatically through pages & fetches all data to a DataFrame
-    response_df = d_bridges.fetch_data_bridges_data(EndpointType.CURRENCY_USD_QUOTE, **currency_params)
+    response_df = d_bridges.fetch_all_data_bridges_data(EndpointType.CURRENCY_USD_QUOTE, **currency_params)
     logger.info(f"API dataframe response: {response_df}")
